@@ -4,55 +4,59 @@ const CTRLS = {
   up: 'ArrowUp',
   right: 'ArrowRight',
 };
-const chr = new Character();
-const peers = {};
+const COLORS = ['blue', 'red', 'yellow', 'green', 'orange', 'purple', 'pink'];
+const CHR = new Character();
+const PEERS = {};
 let client;
 
 document.addEventListener('keydown', e => {
   let update;
   switch (e.code) {
     case CTRLS.left:
-      chr.addPosX(-1);
+      CHR.addPosX(-1);
       update = true;
       break;
     case CTRLS.down:
-      chr.addPosY(1);
+      CHR.addPosY(1);
       update = true;
       break;
     case CTRLS.up:
-      chr.addPosY(-1);
+      CHR.addPosY(-1);
       update = true;
       break;
     case CTRLS.right:
-      chr.addPosX(1);
+      CHR.addPosX(1);
       update = true;
       break;
   }
-  if (update && client) {
+  if (update !== undefined && client !== undefined) {
     requestPOST('../php/main.php', {
       requestID: 1,
       clientID: client,
-      posX: chr.posX,
-      posY: chr.posY
+      posX: CHR.posX,
+      posY: CHR.posY
     });
   }
 });
 
 requestPOST('../php/main.php', {requestID: 0}, result => { client = result.clientID; });
 
-setInterval(() => requestPOST('../php/main.php', {requestID: 2, clientID: client}, data => {
-  Object.keys(data).forEach(key => {
-    if (peers[key]) {
-      peers[key].setPosX(data[key].posX);
-      peers[key].setPosY(data[key].posY);
-    } else if (key != client) {
-      peers[key] = new Character();
-    }
+setInterval(() => {
+  if (client === undefined) return;
+  requestPOST('../php/main.php', {requestID: 2, clientID: client}, data => {
+    Object.keys(data).forEach(key => {
+      if (PEERS[key]) {
+        PEERS[key].setPosX(data[key].posX);
+        PEERS[key].setPosY(data[key].posY);
+      } else if (key != client) {
+        PEERS[key] = new Character(COLORS[key]);
+      }
+    });
+    Object.keys(PEERS).forEach(key => {
+      if (!data[key]) {
+        PEERS[key].destruct();
+        delete PEERS[key];
+      }
+    });
   });
-  Object.keys(peers).forEach(key => {
-    if (!data[key]) {
-      peers[key].destruct();
-      delete peers[key];
-    }
-  });
-}), 100);
+}, 100);

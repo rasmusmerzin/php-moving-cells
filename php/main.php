@@ -1,5 +1,4 @@
 <?php
-
 function get_chars() {
   $chars = apcu_fetch('chars');
   $chars = $chars !== false ? $chars : [];
@@ -16,8 +15,8 @@ function set_chars($chars) {
 function update_char($client, $pos_x, $pos_y) {
   $chars = get_chars();
   if (!$chars[$client]) $chars[$client] = [];
-  if (isset($pos_x)) $chars[$client]['posX'] = $pos_x;
-  if (isset($pos_y)) $chars[$client]['posY'] = $pos_y;
+  if ($pos_x !== null) $chars[$client]['posX'] = $pos_x;
+  if ($pos_y !== null) $chars[$client]['posY'] = $pos_y;
   $chars[$client]['refresh'] = time();
   set_chars($chars);
 }
