@@ -26,7 +26,6 @@ document.addEventListener('keydown', e => {
     case CTRLS.right:
       chr.addPosX(1);
       update = true;
-      console.log(client);
       break;
   }
   if (update && client) {
@@ -41,11 +40,19 @@ document.addEventListener('keydown', e => {
 
 requestPOST('../php/main.php', {requestID: 0}, result => { client = result.clientID; });
 
-setInterval(() => requestGET('../php/main.php', data => {
+setInterval(() => requestPOST('../php/main.php', {requestID: 2, clientID: client}, data => {
   Object.keys(data).forEach(key => {
     if (peers[key]) {
       peers[key].setPosX(data[key].posX);
       peers[key].setPosY(data[key].posY);
-    } else if (key !== client) peers[key] = new Character();
+    } else if (key != client) {
+      peers[key] = new Character();
+    }
+  });
+  Object.keys(peers).forEach(key => {
+    if (!data[key]) {
+      peers[key].destruct();
+      delete peers[key];
+    }
   });
 }), 100);

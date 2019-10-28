@@ -47,4 +47,8 @@ class Character {
     this.renderPos();
     return this.posY;
   }
+
+  destruct() {
+    this._div.parentNode.removeChild(this._div);
+  }
 }
