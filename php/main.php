@@ -1,9 +1,11 @@
 <?php
+$GLOBALS['TIMEOUT'] = 1;
+
 function get_chars() {
   $chars = apcu_fetch('chars');
   $chars = $chars !== false ? $chars : [];
   foreach ($chars as $key => $val) {
-    if (!isset($val['refresh']) || $val['refresh'] < time() -2) unset($chars[$key]);
+    if (!isset($val['refresh']) || $val['refresh'] < time() -$GLOBALS['TIMEOUT']) unset($chars[$key]);
   }
   return $chars;
 }
