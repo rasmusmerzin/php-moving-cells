@@ -12,7 +12,7 @@ PHP MOVING CELLS -- php realtime caching demo
       for fetching JSON data with input and without
 
     main.js
-      handles character input and requests to main.php
+      handles client input and requests to main.php
 
   php/
     main.php
