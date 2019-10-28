@@ -1,5 +1,26 @@
-#PHP Moving Cells
-_php realtime caching demo_
+PHP MOVING CELLS -- php realtime caching demo
 
-JavaScript is written in ES6
-PHP extension __apcu__ required
+
+  JavaScript is written in ES6
+  PHP extension apcu required
+
+
+  js/
+    character.js -- class Character
+      for client controlled cells
+      used for client's own cell and for peers cells
+
+    request.js -- requestPOST() & requestGET()
+      for fetching JSON data with input and without
+
+    main.js
+      handles character input and requests to main.php
+
+  php/
+    main.php
+      interface for fetching and storing cell positions
+      GET request returns json file containing active clients, their positions and last update server time
+      POST request returns json file depending on inputs requestID
+        requestID: 0 -- books and returns a clientID
+        requestID: 1 -- stores client's cell position to server cache
+        requestID: 2 -- returns active clients' cell positions and reminds the server that requesting client is active
