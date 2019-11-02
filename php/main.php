@@ -34,7 +34,7 @@ function new_char() {
 
 switch ($_SERVER['REQUEST_METHOD']) {
   case 'POST':
-    $input = (array) json_decode(file_get_contents("php://input"));
+    $input = (array) json_decode(file_get_contents('php://input'));
     $output = [];
 
     if ($input['requestID'] === 0) $output['clientID'] = new_char();
